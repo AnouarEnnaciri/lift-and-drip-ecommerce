@@ -28,7 +28,7 @@ const SearchBar = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-gray-100 px-4 py-2 pl-2 pr-12 rounded-lg focus:outline-none w-full placeholder:text-gray-700"
               />
-              {/*search icon*/}
+              {/*Search icon*/}
               <button type="submit"
                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
                >
