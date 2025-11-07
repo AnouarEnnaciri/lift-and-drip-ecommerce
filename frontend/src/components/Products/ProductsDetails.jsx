@@ -1,57 +1,70 @@
 import { useState, useEffect } from "react";
 import {toast} from "sonner";
 import ProductGrid from "./ProductGrid";
-const selectedProduct ={
-    name: "Product 1",
-    price: 120,
-    originalPrice: 150,
-    brand:"Lift & Drip",
-    description:"This is a Product 1",
-     material:"Original",
-     options: {
-        label:"Weight",
-        values:["5 KG","10 KG","15 KG","20 KG"],
-     },
-     colors:["Red","Black"],
-     images:[
-        {
-        url:"https://picsum.photos/500/500?random=1",
-        altText:"Product 1",
-     },
-    {
-        url:"https://picsum.photos/500/500?random=2",
-        altText:"Product 2",
-     },
-    ],
-};
+import { useParams } from "react-router-dom";
+
 const ProductsDetails = () => {
-const similarProducts =[
-    {
-        _id: 1,
-        name: "Product 1",
-        price: 100,
-        images:[{url : "https://picsum.photos/500/500?random=3"}]
+ const similarProducts = [
+  {
+    _id: 1,
+    name: "Product 1",
+    price: 100,
+    brand: "Lift & Drip",
+    colors: ["Black", "Red"],
+    options: {
+      label: "Weight",
+      values: ["5 KG", "10 KG"],
     },
-    {
-        _id: 2,
-        name: "Product 2",
-        price: 100,
-        images:[{url : "https://picsum.photos/500/500?random=4"}]
+    images: [{ url: "https://picsum.photos/500/500?random=3" }],
+  },
+  {
+    _id: 2,
+    name: "Product 2",
+    price: 100,
+    brand: "Lift & Drip",
+    colors: ["Gray"],
+    options: {
+      label: "Weight",
+      values: ["10 KG", "20 KG"],
     },
-    {
-        _id: 3,
-        name: "Product 3",
-        price: 100,
-        images:[{url : "https://picsum.photos/500/500?random=5"}]
+    images: [{ url: "https://picsum.photos/500/500?random=4" }],
+  },
+  {
+    _id: 3,
+    name: "Product 3",
+    price: 100,
+    brand: "Lift & Drip",
+
+    colors: ["Red"],
+    options: {
+      label: "Weight",
+      values: ["15 KG"],
     },
-    {
-        _id: 4,
-        name: "Product 4",
-        price: 100,
-        images:[{url : "https://picsum.photos/500/500?random=6"}]
+    images: [{ url: "https://picsum.photos/500/500?random=5" }],
+  },
+  {
+    _id: 4,
+    name: "Product 4",
+    price: 100,
+    brand: "Lift & Drip",
+    colors: ["Black"],
+    options: {
+      label: "Weight",
+      values: ["20 KG", "25 KG"],
     },
-    
+    images: [{ url: "https://picsum.photos/500/500?random=6" }],
+  },
 ];
+
+  // 👇 hooks go INSIDE the component
+  const { id } = useParams();
+  const selectedProduct = similarProducts.find(
+    (p) => p._id === Number(id)
+  );
+
+  if (!selectedProduct) {
+    return <div className="p-6">Product not found.</div>;
+  }
     const [mainImage, setMainImage] = useState("");
     const [selectedValue, setSelectedValue] = useState("");
     const [selectedColor,setSelectedColor] = useState("");
@@ -61,7 +74,7 @@ const similarProducts =[
         if(selectedProduct?.images?.length > 0) {
             setMainImage(selectedProduct.images[0].url)
         }
-    }, []);
+    }, [selectedProduct]);
 
     const handleQuantityChange = (action) => {
         if (action === "plus") setQuantity((prev) => prev + 1);
@@ -138,7 +151,7 @@ const similarProducts =[
                     $ {selectedProduct.price}
                 </p>
                 <p className="text-gray-600 mb-4">
-                    {selectedProduct.description}
+                    {selectedProduct.description || "High-quality gym product."}
                 </p>
                 <div className="mb-4">
                     <p className="text-gray-700">Color:</p>
@@ -213,10 +226,6 @@ const similarProducts =[
                             <tr>
                                 <td className="py-1">Brand</td>
                                 <td className="py-1">{selectedProduct.brand}</td>
-                            </tr>
-                              <tr>
-                                <td className="py-1">Material</td>
-                                <td className="py-1">{selectedProduct.material}</td>
                             </tr>
                         </tbody>
                     </table>
