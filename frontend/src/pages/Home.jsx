@@ -11,19 +11,22 @@ const placeholderProducts = [
         _id: 1,
         name: "Product 1",
         price: 100,
-        images:[{url : "https://picsum.photos/500/500?random=3"}]
+        images:[{url : "https://picsum.photos/500/500?random=3"}],
+        bestSeller: true
     },
     {
         _id: 2,
         name: "Product 2",
         price: 100,
-        images:[{url : "https://picsum.photos/500/500?random=4"}]
+        images:[{url : "https://picsum.photos/500/500?random=4"}],
+        bestSeller: true
     },
     {
         _id: 3,
         name: "Product 3",
         price: 100,
-        images:[{url : "https://picsum.photos/500/500?random=5"}]
+        images:[{url : "https://picsum.photos/500/500?random=5"}],
+        bestSeller: true
     },
     {
         _id: 4,
@@ -56,17 +59,18 @@ const placeholderProducts = [
         images:[{url : "https://picsum.photos/500/500?random=10"}]
     },
     
-]
+];
 const Home = () => {
+  const bestSellers = placeholderProducts.filter(product => product.bestSeller);
+  
   return (
     <div>
         <Hero />
         <GymCollectionSection />
         <NewArrivals />
 
-        {/* Best Sellers Section*/}
         <h2 className="text-3xl text-center font-bold mb-4"> Best Seller</h2>
-        <ProductsDetails />
+        <ProductGrid products={bestSellers} />
 
         <div className="container mx-auto">
           <h2 className="text-3xl text-center font-bold mb-4">
