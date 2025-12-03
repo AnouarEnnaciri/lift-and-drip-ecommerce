@@ -1,0 +1,380 @@
+const products = [
+  // 1. Dumbbells
+  {
+    name: "Hex Dumbbell 5 KG Pair",
+    description:
+      "Hex dumbbells 5 KG, grip antidérapant, revêtement caoutchouc. Idéals pour l'entraînement full-body et home gym.",
+    price: 399,
+    discountPrice: 349,
+    countInStock: 40,
+    sku: "DB-HX-5KG",
+    category: "Strength Equipment",
+    equipmentType: ["Dumbbell"],
+    weightRange: "5 KG",
+    colors: ["Black"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=101",
+        altText: "Hex dumbbell 5 KG pair",
+      },
+    ],
+    isFeatured: true,
+    isPublished: true,
+    rating: 4.8,
+    numReviews: 22,
+    tags: ["dumbbell", "strength", "home gym", "upper body"],
+    metaTitle: "Hex Dumbbell 5 KG Pair | Lift & Drip",
+    metaDescription:
+      "Paire d’hex dumbbells 5 KG avec grip antidérapant pour entraînement de force à la maison ou en salle.",
+    metaKeywords: "dumbbell, 5kg, hex, musculation",
+    dimensions: {
+      length: 25,
+      width: 10,
+      height: 10,
+      unit: "cm",
+    },
+    weight: 5,
+    weightUnit: "KG",
+  },
+
+  {
+    name: "Hex Dumbbell 10 KG Pair",
+    description:
+      "Paire d’hex dumbbells 10 KG pour exercices de force lourds : presses, rows, fentes, épaules.",
+    price: 649,
+    discountPrice: 599,
+    countInStock: 35,
+    sku: "DB-HX-10KG",
+    category: "Strength Equipment",
+    equipmentType: ["Dumbbell"],
+    weightRange: "10 KG",
+    colors: ["Black"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=102",
+        altText: "Hex dumbbell 10 KG pair",
+      },
+    ],
+    isFeatured: true,
+    isPublished: true,
+    rating: 4.9,
+    numReviews: 30,
+    tags: ["dumbbell", "strength", "push", "pull"],
+    metaTitle: "Hex Dumbbell 10 KG Pair | Lift & Drip",
+    metaDescription:
+      "Paire d’hex dumbbells 10 KG pour entraînements de force lourds à la maison ou en salle.",
+    metaKeywords: "dumbbell 10kg, musculation, hex",
+    dimensions: {
+      length: 28,
+      width: 11,
+      height: 11,
+      unit: "cm",
+    },
+    weight: 10,
+    weightUnit: "KG",
+  },
+
+  // 2. Barbell + plates
+  {
+    name: "Olympic Barbell 20 KG",
+    description:
+      "Barre olympique 20 KG, longueur 220 cm, diamètre 50 mm, idéale pour squat, deadlift, bench press.",
+    price: 1999,
+    discountPrice: 1799,
+    countInStock: 15,
+    sku: "BB-OLY-20KG",
+    category: "Strength Equipment",
+    equipmentType: ["Barbell"],
+    weightRange: "20 KG",
+    colors: ["Chrome", "Black"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=103",
+        altText: "Olympic barbell 20 KG",
+      },
+    ],
+    isFeatured: true,
+    isPublished: true,
+    rating: 4.7,
+    numReviews: 18,
+    tags: ["barbell", "squat", "deadlift", "bench"],
+    metaTitle: "Barre Olympique 20 KG | Lift & Drip",
+    metaDescription:
+      "Barre olympique 20 KG robuste pour mouvements de base : squat, deadlift, bench press.",
+    metaKeywords: "barre olympique, 20kg, powerlifting",
+    dimensions: {
+      length: 220,
+      width: 5,
+      height: 5,
+      unit: "cm",
+    },
+    weight: 20,
+    weightUnit: "KG",
+  },
+
+  {
+    name: "Bumper Plates Set 2x10 KG",
+    description:
+      "Paire de bumper plates 10 KG avec trou 50 mm, adaptées à la barre olympique et à l’entrainement type cross-training.",
+    price: 899,
+    discountPrice: 799,
+    countInStock: 25,
+    sku: "PL-BMP-10KG",
+    category: "Strength Equipment",
+    equipmentType: ["Plate"],
+    weightRange: "2 x 10 KG",
+    colors: ["Black"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=104",
+        altText: "Bumper plates 10 KG pair",
+      },
+    ],
+    isFeatured: false,
+    isPublished: true,
+    rating: 4.6,
+    numReviews: 14,
+    tags: ["plates", "bumper", "crossfit"],
+    metaTitle: "Bumper Plates 2x10 KG | Lift & Drip",
+    metaDescription:
+      "Paire de bumper plates 10 KG pour travail explosif, cross-training et musculation.",
+    metaKeywords: "bumper plates, disques 10kg, crossfit",
+    dimensions: {
+      length: 45,
+      width: 45,
+      height: 3,
+      unit: "cm",
+    },
+    weight: 20,
+    weightUnit: "KG",
+  },
+
+  // 3. Kettlebell
+  {
+    name: "Kettlebell 16 KG",
+    description:
+      "Kettlebell 16 KG en fonte avec poignée large pour swings, snatch, goblet squat et conditioning.",
+    price: 549,
+    discountPrice: 499,
+    countInStock: 30,
+    sku: "KB-16KG",
+    category: "Strength Equipment",
+    equipmentType: ["Kettlebell"],
+    weightRange: "16 KG",
+    colors: ["Black"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=105",
+        altText: "Kettlebell 16 KG",
+      },
+    ],
+    isFeatured: false,
+    isPublished: true,
+    rating: 4.8,
+    numReviews: 26,
+    tags: ["kettlebell", "conditioning", "strength"],
+    metaTitle: "Kettlebell 16 KG | Lift & Drip",
+    metaDescription:
+      "Kettlebell 16 KG pour travail de puissance, stabilité et conditioning cardio.",
+    metaKeywords: "kettlebell 16kg, conditioning, force",
+    dimensions: {
+      length: 20,
+      width: 17,
+      height: 28,
+      unit: "cm",
+    },
+    weight: 16,
+    weightUnit: "KG",
+  },
+
+  // 4. Bands & mobility
+  {
+    name: "Resistance Bands Set (Light to Heavy)",
+    description:
+      "Set de 4 bandes élastiques de résistance progressive (light à heavy) pour activation, mobilité et rehab.",
+    price: 249,
+    discountPrice: 199,
+    countInStock: 60,
+    sku: "RB-SET-4",
+    category: "Conditioning Gear",
+    equipmentType: ["Resistance Band"],
+    weightRange: "Multi (Light–Heavy)",
+    colors: ["Green", "Blue", "Purple", "Black"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=106",
+        altText: "Resistance bands set 4 niveaux",
+      },
+    ],
+    isFeatured: true,
+    isPublished: true,
+    rating: 4.5,
+    numReviews: 40,
+    tags: ["bandes", "mobility", "warmup", "rehab"],
+    metaTitle: "Set de Resistance Bands | Lift & Drip",
+    metaDescription:
+      "Set de 4 bandes élastiques pour échauffement, mobilité, rehab et renforcement léger.",
+    metaKeywords: "resistance band, élastique musculation",
+    dimensions: {
+      length: 208,
+      width: 2,
+      height: 0.5,
+      unit: "cm",
+    },
+    weight: 1,
+    weightUnit: "KG",
+  },
+
+  // 5. Cardio / conditioning
+  {
+    name: "Speed Jump Rope",
+    description:
+      "Corde à sauter speed en acier gainé, idéale pour double unders, HIIT, work capacity et sèche.",
+    price: 129,
+    discountPrice: 99,
+    countInStock: 80,
+    sku: "JR-SPEED",
+    category: "Conditioning Gear",
+    equipmentType: ["Jump Rope"],
+    weightRange: "Ultra-Light",
+    colors: ["Black", "Red"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=107",
+        altText: "Speed jump rope",
+      },
+    ],
+    isFeatured: false,
+    isPublished: true,
+    rating: 4.4,
+    numReviews: 35,
+    tags: ["cardio", "jump rope", "conditioning"],
+    metaTitle: "Speed Jump Rope | Lift & Drip",
+    metaDescription:
+      "Corde à sauter speed pour HIIT, double unders et conditioning rapide.",
+    metaKeywords: "corde à sauter, speed rope, HIIT",
+    dimensions: {
+      length: 300,
+      width: 0.5,
+      height: 0.5,
+      unit: "cm",
+    },
+    weight: 0.3,
+    weightUnit: "KG",
+  },
+
+  // 6. Accessoires lifting
+  {
+    name: "Lifting Straps (Pair)",
+    description:
+      "Straps de tirage rembourrés pour sécuriser la prise sur deadlift, rows lourds et shrugs.",
+    price: 179,
+    discountPrice: 149,
+    countInStock: 50,
+    sku: "ACC-STRAPS",
+    category: "Accessories",
+    equipmentType: ["Lifting Strap"],
+    weightRange: "One Size",
+    colors: ["Black"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=108",
+        altText: "Lifting straps pair",
+      },
+    ],
+    isFeatured: false,
+    isPublished: true,
+    rating: 4.6,
+    numReviews: 19,
+    tags: ["accessories", "grip", "deadlift"],
+    metaTitle: "Lifting Straps | Lift & Drip",
+    metaDescription:
+      "Straps de tirage pour sécuriser la prise sur les barres lourdes et protéger les avant-bras.",
+    metaKeywords: "lifting straps, tirage, deadlift",
+    dimensions: {
+      length: 60,
+      width: 4,
+      height: 0.3,
+      unit: "cm",
+    },
+    weight: 0.2,
+    weightUnit: "KG",
+  },
+
+  {
+    name: "Weightlifting Belt 10 mm",
+    description:
+      "Ceinture de powerlifting 10 mm en cuir, verrouillage à boucle, idéale pour squat et deadlift lourds.",
+    price: 749,
+    discountPrice: 699,
+    countInStock: 20,
+    sku: "ACC-BELT-10MM",
+    category: "Accessories",
+    equipmentType: ["Belt"],
+    weightRange: "S–XL",
+    colors: ["Black"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=109",
+        altText: "Weightlifting belt 10mm",
+      },
+    ],
+    isFeatured: true,
+    isPublished: true,
+    rating: 4.9,
+    numReviews: 21,
+    tags: ["belt", "powerlifting", "core", "squat"],
+    metaTitle: "Ceinture Powerlifting 10 mm | Lift & Drip",
+    metaDescription:
+      "Ceinture de powerlifting 10 mm pour sécuriser le bas du dos sur squat et deadlift lourds.",
+    metaKeywords: "ceinture musculation, powerlifting belt",
+    dimensions: {
+      length: 110,
+      width: 10,
+      height: 1,
+      unit: "cm",
+    },
+    weight: 1.2,
+    weightUnit: "KG",
+  },
+
+  // 7. Home gym bundle
+  {
+    name: "Home Gym Starter Bundle",
+    description:
+      "Pack starter pour home gym : paire de dumbbells 5 KG, set de bandes élastiques et speed rope.",
+    price: 999,
+    discountPrice: 899,
+    countInStock: 10,
+    sku: "BNDL-HOME-START",
+    category: "Bundles",
+    equipmentType: ["Dumbbell", "Resistance Band", "Jump Rope"],
+    weightRange: "Light–Medium",
+    colors: ["Black", "Mixed"],
+    images: [
+      {
+        url: "https://picsum.photos/500/500?random=110",
+        altText: "Home gym starter bundle",
+      },
+    ],
+    isFeatured: true,
+    isPublished: true,
+    rating: 4.7,
+    numReviews: 16,
+    tags: ["bundle", "home gym", "starter", "conditioning"],
+    metaTitle: "Pack Home Gym Starter | Lift & Drip",
+    metaDescription:
+      "Bundle complet pour démarrer un home gym : dumbbells 5 KG, bandes de résistance et corde speed.",
+    metaKeywords: "home gym pack, bundle musculation",
+    dimensions: {
+      length: 60,
+      width: 40,
+      height: 30,
+      unit: "cm",
+    },
+    weight: 12,
+    weightUnit: "KG",
+  },
+];
+
+module.exports = products;
