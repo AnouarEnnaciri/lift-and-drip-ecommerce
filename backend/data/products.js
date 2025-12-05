@@ -1,21 +1,22 @@
+
 const products = [
   // 1. Dumbbells
   {
-    name: "Hex Dumbbell 5 KG Pair",
+    name: "Hex Dumbbell 20 KG Pair",
     description:
-      "Hex dumbbells 5 KG, grip antidérapant, revêtement caoutchouc. Idéals pour l'entraînement full-body et home gym.",
-    price: 399,
+      "Hex dumbbells 20 KG, grip antidérapant, revêtement caoutchouc. Idéals pour l'entraînement full-body et home gym.",
+    price:400,
     discountPrice: 349,
     countInStock: 40,
     sku: "DB-HX-5KG",
     category: "Strength Equipment",
     equipmentType: ["Dumbbell"],
-    weightRange: "5 KG",
+    weightRange: "20 KG",
     colors: ["Black"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=101",
-        altText: "Hex dumbbell 5 KG pair",
+        url: "https://images.pexels.com/photos/29224210/pexels-photo-29224210.jpeg?_gl=1*pj8u80*_ga*MTgxMDA2NDQwNC4xNzYxNzY5NDk3*_ga_8JE65Q40S6*czE3NjQ5MzU3OTEkbzQkZzEkdDE3NjQ5MzU4MjMkajI4JGwwJGgw",
+        altText: "Hex dumbbell 20 KG pair",
       },
     ],
     isFeatured: true,
@@ -23,24 +24,24 @@ const products = [
     rating: 4.8,
     numReviews: 22,
     tags: ["dumbbell", "strength", "home gym", "upper body"],
-    metaTitle: "Hex Dumbbell 5 KG Pair | Lift & Drip",
+    metaTitle: "Hex Dumbbell 20 KG Pair | Lift & Drip",
     metaDescription:
-      "Paire d’hex dumbbells 5 KG avec grip antidérapant pour entraînement de force à la maison ou en salle.",
-    metaKeywords: "dumbbell, 5kg, hex, musculation",
+      "Paire d’hex dumbbells 20 KG avec grip antidérapant pour entraînement de force à la maison ou en salle.",
+    metaKeywords: "dumbbell, 20kg, hex, musculation",
     dimensions: {
       length: 25,
       width: 10,
       height: 10,
       unit: "cm",
     },
-    weight: 5,
+    weight: 20,
     weightUnit: "KG",
   },
 
   {
-    name: "Hex Dumbbell 10 KG Pair",
+    name: "Hex Dumbbell 2.5KG and 5KG Pair", 
     description:
-      "Paire d’hex dumbbells 10 KG pour exercices de force lourds : presses, rows, fentes, épaules.",
+      "Paire hex dumbbells 2.5KG et 5KG pour exercices de force lourds: presses, rows, fentes,épaules.",
     price: 649,
     discountPrice: 599,
     countInStock: 35,
@@ -51,7 +52,7 @@ const products = [
     colors: ["Black"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=102",
+        url:"https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         altText: "Hex dumbbell 10 KG pair",
       },
     ],
@@ -89,7 +90,7 @@ const products = [
     colors: ["Chrome", "Black"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=103",
+        url: "https://images.pexels.com/photos/7811528/pexels-photo-7811528.jpeg?_gl=1*z1zgku*_ga*MTgxMDA2NDQwNC4xNzYxNzY5NDk3*_ga_8JE65Q40S6*czE3NjQ5MzU3OTEkbzQkZzEkdDE3NjQ5MzU5NDQkajUyJGwwJGgw",
         altText: "Olympic barbell 20 KG",
       },
     ],
@@ -126,7 +127,7 @@ const products = [
     colors: ["Black"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=104",
+        url: "/images/bumper-plates.png",
         altText: "Bumper plates 10 KG pair",
       },
     ],
@@ -164,7 +165,7 @@ const products = [
     colors: ["Black"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=105",
+        url: "https://images.unsplash.com/photo-1554980555-7afb7c8795fe?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         altText: "Kettlebell 16 KG",
       },
     ],
@@ -202,7 +203,7 @@ const products = [
     colors: ["Green", "Blue", "Purple", "Black"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=106",
+        url: "https://images.unsplash.com/photo-1584827386916-b5351d3ba34b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         altText: "Resistance bands set 4 niveaux",
       },
     ],
@@ -240,7 +241,7 @@ const products = [
     colors: ["Black", "Red"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=107",
+        url: "https://plus.unsplash.com/premium_photo-1664529498751-9bcd541edb9f?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         altText: "Speed jump rope",
       },
     ],
@@ -278,7 +279,7 @@ const products = [
     colors: ["Black"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=108",
+         url: "/images/lifting-straps.png",
         altText: "Lifting straps pair",
       },
     ],
@@ -305,8 +306,8 @@ const products = [
     name: "Weightlifting Belt 10 mm",
     description:
       "Ceinture de powerlifting 10 mm en cuir, verrouillage à boucle, idéale pour squat et deadlift lourds.",
-    price: 749,
-    discountPrice: 699,
+    price: 300,
+    discountPrice: 100,
     countInStock: 20,
     sku: "ACC-BELT-10MM",
     category: "Accessories",
@@ -315,7 +316,7 @@ const products = [
     colors: ["Black"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=109",
+        url: "https://images.unsplash.com/photo-1586232710888-675866d80ad2?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         altText: "Weightlifting belt 10mm",
       },
     ],
@@ -353,7 +354,7 @@ const products = [
     colors: ["Black", "Mixed"],
     images: [
       {
-        url: "https://picsum.photos/500/500?random=110",
+        url: "https://images.unsplash.com/photo-1697129392091-d08875930fec?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         altText: "Home gym starter bundle",
       },
     ],

@@ -14,7 +14,6 @@ const NewArrivals = () => {
     const [ newArrivals, setNewArrivals] = useState([]);
 
     useEffect(() => {
-        // Fetch new arrivals data from API
         const fetchNewArrivals = async () => {
             try {
                 const response = await axios.get(
@@ -27,6 +26,7 @@ const NewArrivals = () => {
         };
         fetchNewArrivals();
     }, []);
+
     const handleMouseDown = (e) => {
         setIsDragging(true);
         setStartX(e.pageX -scrollRef.current.offsetLeft);
@@ -48,7 +48,7 @@ const NewArrivals = () => {
         const scrollAmount = direction === "left" ? -300 : 300;
         scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
-    // Update Scroll Buttons
+
     const updateScrollButtons = () => {
         const container = scrollRef.current;
         if (container) {
@@ -56,25 +56,27 @@ const NewArrivals = () => {
             const rightScrollable = container.scrollWidth > leftScroll + container.clientWidth;
             setCanScrollLeft(leftScroll > 0);
             setCanScrollRight(rightScrollable);
-        console.log({
-        scrollLeft: container.scrollLeft,
-        clientWidth: container.clientWidth,
-        containerScrollWidth: container.scrollWidth,
-        offsetLeft: scrollRef.current.offsetLeft
-        });
-    }
-};
+            console.log({
+                scrollLeft: container.scrollLeft,
+                clientWidth: container.clientWidth,
+                containerScrollWidth: container.scrollWidth,
+                offsetLeft: scrollRef.current.offsetLeft
+            });
+        }
+    };
+
     useEffect(() => {
         const container = scrollRef.current;
         if (!container) return;
         const handleScroll = () => updateScrollButtons();
-            container.addEventListener("scroll", handleScroll);
-            updateScrollButtons();
-            return () => {
-                container.removeEventListener("scroll", handleScroll);
-            };
+        container.addEventListener("scroll", handleScroll);
+        updateScrollButtons();
+        return () => {
+            container.removeEventListener("scroll", handleScroll);
+        };
         
     }, [newArrivals]);
+
   return (
     <section className="py-16 px-4 lg:px-0">
         <div className="container mx-auto text-center mb-10 relative">
@@ -85,7 +87,6 @@ const NewArrivals = () => {
                 Discover the latest equipment and accessories in our new arrivals collection.
             </p>
 
-            {/* Scroll Buttons */}
             <div className="absolute right-0 bottom-[-30px] flex space-x-2">
                 <button 
                 onClick={() => scroll("left")}
@@ -111,7 +112,6 @@ const NewArrivals = () => {
           </div>
         </div>
 
-        {/* Scrollabe Content */}
         <div ref={scrollRef} 
         className={`container mx-auto overflow-x-scroll flex space-x-6 relative
             ${
@@ -122,22 +122,28 @@ const NewArrivals = () => {
         onMouseUp={handleMouseUpOrLeave}
         onMouseLeave={handleMouseUpOrLeave}
         >
-            {newArrivals.map((product) => (
-                <div key={product._id}
-                 className="min-w-[100%] lg:min-w-[30%] relative">
-                    <img src={product.images[0]?.url} 
-                    alt={product.images[0]?.altText || product.name}
-                    className="w-full h-[500px] object-cover rounded-lg"
-                    draggable="false"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 backdrop-blur-md text-white p-4 rounded-b-lg">
-                        <Link to={`/product/${product._id}`} className="block">
-                        <h4 className="font-medium">{product.name}</h4>
-                        <p className="mt-1">${product.price}</p>
-                        </Link>
+            {newArrivals.map((product) => {
+                const isBelt = product.sku === "ACC-BELT-10MM";
+                return (
+                    <div key={product._id}
+                    className="min-w-[100%] lg:min-w-[30%] relative">
+                        <img 
+                        src={product.images[0]?.url} 
+                        alt={product.images[0]?.altText || product.name}
+                        className={`w-full h-[500px] object-cover rounded-lg ${
+                            isBelt ? "object-left" : "object-center"
+                        }`}
+                        draggable="false"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 backdrop-blur-md text-white p-4 rounded-b-lg">
+                            <Link to={`/product/${product._id}`} className="block">
+                            <h4 className="font-medium">{product.name}</h4>
+                            <p className="mt-1">{product.price} DH</p>
+                            </Link>
+                        </div>
                     </div>
-                    </div>
-            ))}
+                );
+            })}
         </div>
     </section>
   )

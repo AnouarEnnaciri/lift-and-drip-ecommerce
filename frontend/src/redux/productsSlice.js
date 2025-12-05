@@ -12,9 +12,11 @@ export const fetchProductsByFilters = createAsyncThunk("products/fetchByFilters"
     sortBy,
     search,
     category,
+    equipmentType,
     material,
     brand,
     limit,
+    isFeatured,
 }) => {
     const query = new URLSearchParams();
     if(collection) query.append("collection",collection);
@@ -29,6 +31,8 @@ export const fetchProductsByFilters = createAsyncThunk("products/fetchByFilters"
     if(material) query.append("material",material);
     if(brand) query.append("brand",brand);
     if(limit) query.append("limit",limit);
+    if(equipmentType) query.append("equipmentType",equipmentType);
+    if(isFeatured !== undefined) query.append("isFeatured",isFeatured);
 
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products?${query.toString()}`
 )
@@ -64,9 +68,9 @@ export const updateProduct = createAsyncThunk(
  }
 );
 
-// Async thunk to fetch similar prodcuts
+// Async thunk to fetch similar products
 export const fetchSimilarProducts = createAsyncThunk("products/fetchSimilarProducts", async({id}) => {
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/similar/${id}`
         );
     return response.data;
 });

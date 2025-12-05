@@ -18,7 +18,7 @@ const getCart = async (userId, guestId) =>{
 // @route POST /api/cart
 // @desc Add a product to the cart for a guest or logged in user
 // @access Public
-router.post("/", protect, async (req,res)=> {
+router.post("/", async (req,res)=> {
     const {
         productId,
         quantity,
@@ -101,7 +101,7 @@ return res.status(200).json(cart);
 // @route PUT /api/cart
 // @desc Update product quantity in the cart for a guest or logged-in user
 // @access Public
-router.put("/", protect, async (req,res)=>{
+router.put("/",async (req,res)=>{
     const {productId, quantity, selectedWeight,color,guestId} = req.body;
     const qty = Number(quantity);
     const userId = req.user ? req.user._id : null;
@@ -142,7 +142,7 @@ router.put("/", protect, async (req,res)=>{
 // @route DELETE /api/cart
 // @desc Remove a product from the cart
 // @access Public 
-router.delete("/", protect, async (req,res)=>{
+router.delete("/",async (req,res)=>{
     const { productId, selectedWeight, color, guestId } = req.body;
     const userId = req.user ? req.user._id : null;
     try {
@@ -178,7 +178,7 @@ router.delete("/", protect, async (req,res)=>{
 // @route GET /api/cart
 // @desc Get logged-in user's or guest user's cart
 // @access Private (user) / Public with guestId
-router.get("/",protect, async (req,res)=>{
+router.get("/",async (req,res)=>{
     const userId = req.user ? req.user._id : null;
     const {guestId }=req.query;
 
