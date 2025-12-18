@@ -40,7 +40,7 @@ export const updateUser = createAsyncThunk("admin/updateUser", async({id, name,e
             },
         }
     );
-    return response.data;
+    return response.data.user;
 }
 );
 

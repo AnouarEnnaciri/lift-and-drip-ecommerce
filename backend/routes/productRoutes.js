@@ -7,28 +7,41 @@ const router = express.Router();
 router.post("/", protect, admin, async (req, res) => {
   try {
     const {
-      name,
-      description,
-      price,
-      discountPrice,
-      countInStock,
-      sku,
-      category,
-      equipmentType,
-      weightRange,
-      colors,
-      images,
-      isFeatured,
-      isPublished,
-      rating,
-      numReviews,
-      tags,
-      metaTitle,
-      metaDescription,
-      metaKeywords,
-      dimensions,
-      weight,
-      weightUnit,
+        name,
+  description,
+  price,
+  discountPrice,
+  countInStock,
+  sku,
+  category,
+  equipmentType,
+  weightRange,
+  images,
+  isFeatured,
+  featuredRank,
+  isPublished,
+
+  isNewArrival,
+  newArrivalRank,
+
+  isBestSeller,
+  bestSellerRank,
+
+  isTopStrength,
+  topStrengthRank,
+
+  isTopConditioning,
+  topConditioningRank,
+
+  rating,
+  numReviews,
+  tags,
+  metaTitle,
+  metaDescription,
+  metaKeywords,
+  dimensions,
+  weight,
+  weightUnit,
     } = req.body;
 
     const product = new Product({
@@ -41,10 +54,18 @@ router.post("/", protect, admin, async (req, res) => {
       category,
       equipmentType,
       weightRange,
-      colors,
       images,
       isFeatured,
       isPublished,
+      isNewArrival,
+      newArrivalRank,
+      isBestSeller,
+      bestSellerRank,
+      isTopStrength,
+      topStrengthRank,
+      isTopConditioning,
+      topConditioningRank,
+      featuredRank,
       rating,
       numReviews,
       tags,
@@ -92,10 +113,11 @@ router.put("/:id", protect, admin, async (req, res) => {
       category,
       equipmentType,
       weightRange,
-      colors,
       images,
       isFeatured,
       isPublished,
+      isNewArrival,
+      newArrivalRank,
       rating,
       numReviews,
       tags,
@@ -105,33 +127,51 @@ router.put("/:id", protect, admin, async (req, res) => {
       dimensions,
       weight,
       weightUnit,
+      isBestSeller,
+      isTopStrength,
+      isTopConditioning,
+      featuredRank,
+      bestSellerRank,
+      topStrengthRank,
+      topConditioningRank,
     } = req.body;
 
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      product.name = name || product.name;
-      product.description = description || product.description;
-      product.price = price || product.price;
-      product.discountPrice = discountPrice || product.discountPrice;
-      product.countInStock = countInStock || product.countInStock;
-      product.category = category || product.category;
-      product.equipmentType = equipmentType || product.equipmentType;
-      product.weightRange = weightRange || product.weightRange;
-      product.colors = colors || product.colors;
-      product.images = images || product.images;
-      product.tags = tags || product.tags;
-      product.metaTitle = metaTitle || product.metaTitle;
-      product.metaDescription = metaDescription || product.metaDescription;
-      product.metaKeywords = metaKeywords || product.metaKeywords;
-      product.isFeatured =
-        isFeatured !== undefined ? isFeatured : product.isFeatured;
-      product.isPublished =
-        isPublished !== undefined ? isPublished : product.isPublished;
-      product.dimensions = dimensions || product.dimensions;
-      product.weight = weight || product.weight;
-      product.weightUnit = weightUnit || product.weightUnit;
-      product.sku = sku || product.sku;
+      product.name = name ?? product.name;
+      product.description = description ?? product.description;
+      product.price = price ?? product.price;
+      product.discountPrice = discountPrice ?? product.discountPrice;
+      product.countInStock = countInStock ?? product.countInStock;
+      product.category = category ?? product.category;
+      product.equipmentType = equipmentType ?? product.equipmentType;
+      product.weightRange = weightRange ?? product.weightRange;
+      product.images = images ?? product.images;
+      product.tags = tags ?? product.tags;
+      product.metaTitle = metaTitle ?? product.metaTitle;
+      product.metaDescription = metaDescription ?? product.metaDescription;
+      product.metaKeywords = metaKeywords ?? product.metaKeywords;
+      product.isFeatured = isFeatured ?? product.isFeatured;
+      product.isPublished = isPublished ?? product.isPublished;
+      product.isNewArrival = isNewArrival ?? product.isNewArrival;
+      product.newArrivalRank = newArrivalRank ?? product.newArrivalRank;
+      product.rating = rating ?? product.rating;
+      product.numReviews = numReviews ?? product.numReviews;
+      product.dimensions = dimensions ?? product.dimensions;
+      product.weight = weight ?? product.weight;
+      product.weightUnit = weightUnit ?? product.weightUnit;
+      product.sku = sku ?? product.sku;
+
+      product.isBestSeller = isBestSeller ?? product.isBestSeller;
+      product.isTopStrength = isTopStrength ?? product.isTopStrength;
+      product.isTopConditioning = isTopConditioning ?? product.isTopConditioning;
+
+      product.featuredRank = featuredRank ?? product.featuredRank;
+      product.bestSellerRank = bestSellerRank ?? product.bestSellerRank;
+      product.topStrengthRank = topStrengthRank ?? product.topStrengthRank;
+      product.topConditioningRank =
+        topConditioningRank ?? product.topConditioningRank;
 
       const updatedProduct = await product.save();
       res.json(updatedProduct);
@@ -144,11 +184,16 @@ router.put("/:id", protect, admin, async (req, res) => {
   }
 });
 
+// @route DELETE /api/products/:id
+// @desc Delete a product by ID
+// @access Private/Admin
 router.delete("/:id", protect, admin, async (req, res) => {
   try {
+    // Find the product by ID
     const product = await Product.findById(req.params.id);
 
     if (product) {
+      // Remove the product from DB
       await product.deleteOne();
       res.json({ message: "Product removed" });
     } else {
@@ -165,8 +210,7 @@ router.get("/", async (req, res) => {
     const {
       category,
       equipmentType,
-      weightRange,
-      colors,
+      weight,
       minPrice,
       maxPrice,
       sortBy,
@@ -175,24 +219,43 @@ router.get("/", async (req, res) => {
       isPublished,
       limit,
     } = req.query;
-    let query = {};
 
-    if (category && category.toLowerCase() !== "all") {
+    const query = {};
+
+    // CATEGORY
+    if (category && category !== "all") {
       query.category = category;
     }
 
-    if (weightRange && weightRange.toLowerCase() !== "all") {
-      query.weightRange = weightRange;
+    // EQUIPMENT TYPE (normalize singular/plural)
+    if (equipmentType && equipmentType !== "all") {
+      const types = equipmentType
+        .split(",")
+        .map((t) => t.trim())
+        .map((t) => {
+          if (t.endsWith("s")) return t.slice(0, -1);
+          return t;
+        });
+
+      query.equipmentType = { $in: types };
     }
 
-    if (equipmentType && equipmentType.toLowerCase() !== "all") {
-      query.equipmentType = equipmentType;
+    // WEIGHT RANGE (numeric filter)
+    if (weight) {
+      const [min, max] = weight.split("-").map(Number);
+      if (!isNaN(min) && !isNaN(max)) {
+        query.weight = { $gte: min, $lte: max };
+      }
     }
 
-    if (colors) {
-      query.colors = { $in: [colors] };
+    // PRICE RANGE
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
     }
 
+    // FLAGS
     if (isFeatured !== undefined) {
       query.isFeatured = isFeatured === "true";
     }
@@ -201,12 +264,7 @@ router.get("/", async (req, res) => {
       query.isPublished = isPublished === "true";
     }
 
-    if (minPrice || maxPrice) {
-      query.price = {};
-      if (minPrice) query.price.$gte = Number(minPrice);
-      if (maxPrice) query.price.$lte = Number(maxPrice);
-    }
-
+    // SEARCH
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
@@ -214,43 +272,140 @@ router.get("/", async (req, res) => {
       ];
     }
 
+    // SORT
     let sort = {};
-    if (sortBy) {
-      switch (sortBy) {
-        case "priceAsc":
-          sort = { price: 1 };
-          break;
-        case "priceDesc":
-          sort = { price: -1 };
-          break;
-        case "popularity":
-          sort = { rating: -1 };
-          break;
-        default:
-          break;
-      }
-    }
+    if (sortBy === "priceLowToHigh") sort = { price: 1 };
+    if (sortBy === "priceHighToLow") sort = { price: -1 };
+    if (sortBy === "popularity") sort = { rating: -1 };
 
     const products = await Product.find(query)
       .sort(sort)
       .limit(Number(limit) || 0);
+
     res.json(products);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("server Error");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
   }
 });
 
-router.get("/best-seller", async (req, res) => {
+router.patch("/:id/featured", protect, admin, async (req, res) => {
   try {
-    const bestSellers = await Product.find().sort({ rating: -1 }).limit(3);
-    res.json(bestSellers);
+    const { isFeatured, featuredRank } = req.body;
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.isFeatured = isFeatured ?? product.isFeatured;
+    product.featuredRank = featuredRank ?? product.featuredRank;
+
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).send("Server Error");
   }
 });
 
+router.patch("/:id/best-seller", protect, admin, async (req, res) => {
+  try {
+    const { isBestSeller, bestSellerRank } = req.body;
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.isBestSeller = isBestSeller ?? product.isBestSeller;
+    product.bestSellerRank = bestSellerRank ?? product.bestSellerRank;
+
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.patch("/:id/top-strength", protect, admin, async (req, res) => {
+  try {
+    const { isTopStrength, topStrengthRank } = req.body;
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.isTopStrength = isTopStrength ?? product.isTopStrength;
+    product.topStrengthRank = topStrengthRank ?? product.topStrengthRank;
+
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.patch("/:id/top-conditioning", protect, admin, async (req, res) => {
+  try {
+    const { isTopConditioning, topConditioningRank } = req.body;
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.isTopConditioning =
+      isTopConditioning ?? product.isTopConditioning;
+    product.topConditioningRank =
+      topConditioningRank ?? product.topConditioningRank;
+
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.get("/home/sections", async (req, res) => {
+  try {
+    const limit = Math.min(Number(req.query.limit) || 8, 30);
+
+    const featured = await Product.find({ isPublished: true, isFeatured: true })
+      .sort({ featuredRank: 1, createdAt: -1 })
+      .limit(limit);
+
+    const bestSellers = await Product.find({ isPublished: true, isBestSeller: true })
+      .sort({ bestSellerRank: 1, createdAt: -1 })
+      .limit(limit);
+
+    const topStrength = await Product.find({ isPublished: true, isTopStrength: true })
+      .sort({ topStrengthRank: 1, createdAt: -1 })
+      .limit(limit);
+
+    const topConditioning = await Product.find({ isPublished: true, isTopConditioning: true })
+      .sort({ topConditioningRank: 1, createdAt: -1 })
+      .limit(limit);
+    const newArrivals = await Product.find({isPublished: true,isNewArrival: true,})
+
+  .sort({ newArrivalRank: 1, createdAt: -1 })
+  .limit(limit);
+
+
+    res.json({ featured, bestSellers, topStrength, topConditioning,newArrivals });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route GET /api/products/similar/:id
+// @desc Retrieve similar products based on the current product
+// @access Public
 router.get("/similar/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -274,7 +429,15 @@ router.get("/similar/:id", async (req, res) => {
 
 router.get("/new-arrivals", async (req, res) => {
   try {
-    const newArrivals = await Product.find().sort({ createdAt: -1 }).limit(8);
+    const limit = Math.min(Number(req.query.limit) || 8, 30);
+
+    const newArrivals = await Product.find({
+      isPublished: true,
+      isNewArrival: true,
+    })
+      .sort({ newArrivalRank: 1, createdAt: -1 })
+      .limit(limit);
+
     res.json(newArrivals);
   } catch (error) {
     console.error(error);

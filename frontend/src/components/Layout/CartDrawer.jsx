@@ -1,46 +1,57 @@
 import { IoMdClose } from "react-icons/io";
-import { useState } from "react";
 import Cartcontents from "../Cart/CartContents.jsx";
-import Checkout from "../Cart/Checkout.jsx";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
+const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
+  const navigate = useNavigate();
+  const { user, guestId } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
+  const userId = user ? user._id : null;
 
-
-const CartDrawer = ({drawerOpen, toggleCartDrawer}) => {
-const navigate = useNavigate()
   const handleCheckout = () => {
     toggleCartDrawer();
-    navigate("/Checkout");
+    navigate("/checkout");
+  };
 
-  }
-  return ( 
-  <div className={`fixed top-0 right-0  w-3/4 sm:w-1/2 md:w-[30rem] h-full bg-white shadow-lg transform transition-transform duration-300 flex flex-col z-50
-    ${drawerOpen ? "translate-x-0": "translate-x-full"
-  }`}
-  >
-    {/* Close Button */}
-    <div className="flex justify-end p-4">
+  return (
+    <div
+      className={`fixed top-0 right-0 w-3/4 sm:w-1/2 md:w-[30rem] h-full bg-white shadow-lg transform transition-transform duration-300 flex flex-col z-50 ${
+        drawerOpen ? "translate-x-0" : "translate-x-full"
+      }`}
+    >
+      <div className="flex justify-end p-4">
         <button onClick={toggleCartDrawer}>
-            <IoMdClose className="h-6 w-6 text-gray-600"/>
+          <IoMdClose className="h-6 w-6 text-gray-600" />
         </button>
-    </div>
-    {/* Cart Content */}
-    <div className="flex-grow p-4 overflow-y-auto">
+      </div>
+
+      <div className="flex-grow p-4 overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
-        < Cartcontents />
+        {cart && cart.products?.length > 0 ? (
+          <Cartcontents cart={cart} userId={userId} guestId={guestId} />
+        ) : (
+          <p>Your cart is empty.</p>
+        )}
+      </div>
+
+      <div className="p-4 bg-white sticky bottom-0">
+        {cart && cart.products?.length > 0 && (
+          <>
+            <button
+              onClick={handleCheckout}
+              className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition"
+            >
+              Checkout
+            </button>
+            <p className="text-sm tracking-tighter text-gray-500 mt-2 text-center">
+              Shipping, taxes, and discount codes calculated at checkout.
+            </p>
+          </>
+        )}
+      </div>
     </div>
-    {/* Checkout Button fixed at bottom */}
-    <div className="p-4 bg-white sticky bottom-0">
-        <button onClick={handleCheckout}
-        className="w-full bg-black text-white py-3 rounded-lg front-semibold hover:bg-gray-800 transition">
-            Checkout
-        </button>
-        <p className="text-sm tracking-tighter text-gray-500 mt-2 text-center ">
-            Shipping, taxes, and discount codes calculated at checkout.
-        </p>
-    </div>
-  </div>
   );
 };
 
-export default CartDrawer
+export default CartDrawer;

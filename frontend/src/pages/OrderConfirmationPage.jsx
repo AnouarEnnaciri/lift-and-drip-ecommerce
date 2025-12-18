@@ -1,34 +1,24 @@
-const checkout = {
-  _id: "LD-0001",
-  createdAt: new Date(),
-  checkedoutItems: [
-    {
-      productId: "1",
-      name: "Adjustable Dumbbell",
-      weight: "20 KG",
-      color: "Black",
-      price: 150,
-      quantity: 1,
-      image: "https://picsum.photos/150?random=11",
-    },
-    {
-      productId: "2",
-      name: "Resistance Band Se",
-      weight: "Light",
-      color: "Red",
-      price: 75,
-      quantity: 1,
-      image: "https://picsum.photos/150?random=12",
-    },
-  ],
-  shippingAddress: {
-    address: "123 Gym Street",
-    city: "Casablanca",
-    Country: "Morocco",
-  },
-};
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearCart } from "../redux/cartSlice";
+import { useDispatch } from "react-redux";
 
 const OrderConfirmationPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {checkout} = useSelector((state)=> state.checkout);
+
+// Clear the cart when the order is confirmed
+useEffect(()=>{
+  if(checkout && checkout._id) {
+    dispatch(clearCart());
+    localStorage.removeItem("cart");
+  } else {
+    navigate("/my-orders");
+  }
+  }, [checkout,dispatch,navigate]);
+
   const calculateEstimatedDelivery = (createdAt) => {
     const orderDate = new Date(createdAt);
     orderDate.setDate(orderDate.getDate() + 10); // it will add 10 days to the order date

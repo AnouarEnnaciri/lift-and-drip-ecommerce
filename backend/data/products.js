@@ -12,7 +12,6 @@ const products = [
     category: "Strength Equipment",
     equipmentType: ["Dumbbell"],
     weightRange: "20 KG",
-    colors: ["Black"],
     images: [
       {
         url: "https://images.pexels.com/photos/29224210/pexels-photo-29224210.jpeg?_gl=1*pj8u80*_ga*MTgxMDA2NDQwNC4xNzYxNzY5NDk3*_ga_8JE65Q40S6*czE3NjQ5MzU3OTEkbzQkZzEkdDE3NjQ5MzU4MjMkajI4JGwwJGgw",
@@ -49,7 +48,6 @@ const products = [
     category: "Strength Equipment",
     equipmentType: ["Dumbbell"],
     weightRange: "10 KG",
-    colors: ["Black"],
     images: [
       {
         url:"https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -87,7 +85,6 @@ const products = [
     category: "Strength Equipment",
     equipmentType: ["Barbell"],
     weightRange: "20 KG",
-    colors: ["Chrome", "Black"],
     images: [
       {
         url: "https://images.pexels.com/photos/7811528/pexels-photo-7811528.jpeg?_gl=1*z1zgku*_ga*MTgxMDA2NDQwNC4xNzYxNzY5NDk3*_ga_8JE65Q40S6*czE3NjQ5MzU3OTEkbzQkZzEkdDE3NjQ5MzU5NDQkajUyJGwwJGgw",
@@ -124,7 +121,6 @@ const products = [
     category: "Strength Equipment",
     equipmentType: ["Plate"],
     weightRange: "2 x 10 KG",
-    colors: ["Black"],
     images: [
       {
         url: "/images/bumper-plates.png",
@@ -162,7 +158,6 @@ const products = [
     category: "Strength Equipment",
     equipmentType: ["Kettlebell"],
     weightRange: "16 KG",
-    colors: ["Black"],
     images: [
       {
         url: "https://images.unsplash.com/photo-1554980555-7afb7c8795fe?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -200,7 +195,6 @@ const products = [
     category: "Conditioning Gear",
     equipmentType: ["Resistance Band"],
     weightRange: "Multi (Light–Heavy)",
-    colors: ["Green", "Blue", "Purple", "Black"],
     images: [
       {
         url: "https://images.unsplash.com/photo-1584827386916-b5351d3ba34b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -238,7 +232,6 @@ const products = [
     category: "Conditioning Gear",
     equipmentType: ["Jump Rope"],
     weightRange: "Ultra-Light",
-    colors: ["Black", "Red"],
     images: [
       {
         url: "https://plus.unsplash.com/premium_photo-1664529498751-9bcd541edb9f?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -276,7 +269,6 @@ const products = [
     category: "Accessories",
     equipmentType: ["Lifting Strap"],
     weightRange: "One Size",
-    colors: ["Black"],
     images: [
       {
          url: "/images/lifting-straps.png",
@@ -313,7 +305,6 @@ const products = [
     category: "Accessories",
     equipmentType: ["Belt"],
     weightRange: "S–XL",
-    colors: ["Black"],
     images: [
       {
         url: "https://images.unsplash.com/photo-1586232710888-675866d80ad2?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -338,8 +329,40 @@ const products = [
     weight: 1.2,
     weightUnit: "KG",
   },
+  {
+  name: "Slam Ball",
+  description:
+    "Slam ball  anti-rebond, parfait pour conditioning, explosivité, core et circuits HIIT.",
+  price: 299,
+  discountPrice: 249,
+  countInStock: 35,
+  sku: "SB-10KG",
+  category: "Conditioning Gear",
+  equipmentType: ["Slam Ball"],
+  images: [
+    {
+      url: "https://images.unsplash.com/photo-1685633224704-161d7032379e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      altText: "Slam ball",
+    },
+  ],
+  isFeatured: false,
+  isPublished: true,
+  rating: 4.6,
+  numReviews: 12,
+  tags: ["slam ball", "conditioning", "hiit", "core"],
+  metaTitle: "Slam Ball  | Lift & Drip",
+  metaDescription:
+    "Slam ball anti-rebond pour entraînements HIIT, core et explosivité.",
+  metaKeywords: "slam ball 10kg, conditioning, hiit",
+  dimensions: {
+    length: 23,
+    width: 23,
+    height: 23,
+    unit: "cm",
+  },
+},
 
-  // 7. Home gym bundle
+  
   {
     name: "Home Gym Starter Bundle",
     description:
@@ -351,7 +374,6 @@ const products = [
     category: "Bundles",
     equipmentType: ["Dumbbell", "Resistance Band", "Jump Rope"],
     weightRange: "Light–Medium",
-    colors: ["Black", "Mixed"],
     images: [
       {
         url: "https://images.unsplash.com/photo-1697129392091-d08875930fec?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
