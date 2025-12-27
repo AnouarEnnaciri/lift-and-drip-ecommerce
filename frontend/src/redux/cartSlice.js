@@ -10,6 +10,10 @@ const saveCartToStorage = (cart) => {
   localStorage.setItem("cart", JSON.stringify(cart));
 };
 
+const saveGuestId = (cart) => {
+  if (cart?.guestId) localStorage.setItem("guestId", cart.guestId);
+};
+
 const getAuthHeaders = () => {
   const token = localStorage.getItem("userToken");
   return token
@@ -42,7 +46,7 @@ export const fetchCart = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async ({ productId, quantity, selectedWeight, color, guestId }, { rejectWithValue }) => {
+  async ({ productId, quantity, selectedWeight, guestId }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
@@ -50,7 +54,6 @@ export const addToCart = createAsyncThunk(
           productId,
           quantity,
           selectedWeight,
-          color,
           guestId,
         },
         getAuthHeaders()
@@ -64,7 +67,7 @@ export const addToCart = createAsyncThunk(
 
 export const updateCartItemQuantity = createAsyncThunk(
   "cart/updateCartItemQuantity",
-  async ({ productId, quantity, selectedWeight, color, guestId }, { rejectWithValue }) => {
+  async ({ productId, quantity, selectedWeight, guestId }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
@@ -72,7 +75,6 @@ export const updateCartItemQuantity = createAsyncThunk(
           productId,
           quantity,
           selectedWeight,
-          color,
           guestId,
         },
         getAuthHeaders()
@@ -86,12 +88,12 @@ export const updateCartItemQuantity = createAsyncThunk(
 
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
-  async ({ productId, selectedWeight, color, guestId }, { rejectWithValue }) => {
+  async ({ productId, selectedWeight, guestId }, { rejectWithValue }) => {
     try {
       const response = await axios({
         method: "DELETE",
         url: `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-        data: { productId, selectedWeight, color, guestId },
+        data: { productId, selectedWeight, guestId },
         ...getAuthHeaders(),
       });
       return response.data;
@@ -128,6 +130,7 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.cart = { products: [] };
       localStorage.removeItem("cart");
+      localStorage.removeItem("guestId");
     },
   },
   extraReducers: (builder) => {
@@ -141,6 +144,7 @@ const cartSlice = createSlice({
         state.cart = action.payload;
         state.error = null;
         saveCartToStorage(action.payload);
+        saveGuestId(action.payload);
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.loading = false;
@@ -155,6 +159,7 @@ const cartSlice = createSlice({
         state.cart = action.payload;
         state.error = null;
         saveCartToStorage(action.payload);
+        saveGuestId(action.payload);
       })
       .addCase(addToCart.rejected, (state, action) => {
         state.loading = false;
@@ -169,6 +174,7 @@ const cartSlice = createSlice({
         state.cart = action.payload;
         state.error = null;
         saveCartToStorage(action.payload);
+        saveGuestId(action.payload);
       })
       .addCase(updateCartItemQuantity.rejected, (state, action) => {
         state.loading = false;
@@ -184,6 +190,7 @@ const cartSlice = createSlice({
         state.cart = action.payload;
         state.error = null;
         saveCartToStorage(action.payload);
+        saveGuestId(action.payload);
       })
       .addCase(removeFromCart.rejected, (state, action) => {
         state.loading = false;
@@ -198,6 +205,7 @@ const cartSlice = createSlice({
         state.cart = action.payload;
         state.error = null;
         saveCartToStorage(action.payload);
+        saveGuestId(action.payload);
       })
       .addCase(mergeCart.rejected, (state, action) => {
         state.loading = false;

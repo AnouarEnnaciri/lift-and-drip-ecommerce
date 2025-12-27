@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { fetchAdminProducts, deleteProduct } from "../../redux/adminProductSlice";
 
 const ProductManagement = () => {
 const dispatch = useDispatch();

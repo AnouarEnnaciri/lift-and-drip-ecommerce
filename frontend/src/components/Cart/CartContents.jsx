@@ -1,17 +1,11 @@
 import { RiDeleteBin3Line } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { updateCartItemQuantity, removeFromCart } from "../../redux/cartSlice";
-
+const formatPrice = (price) => `${price.toLocaleString()} DH`;
 const CartContents = ({ cart, userId, guestId }) => {
   const dispatch = useDispatch();
 
-  const handleAddToCart = ({
-    productId,
-    delta,
-    quantity,
-    selectedWeight,
-    color,
-  }) => {
+  const handleAddToCart = ({ productId, delta, quantity, selectedWeight }) => {
     const newQuantity = quantity + delta;
     if (newQuantity < 1) return;
 
@@ -20,22 +14,16 @@ const CartContents = ({ cart, userId, guestId }) => {
         productId,
         quantity: newQuantity,
         selectedWeight,
-        color,
         guestId,
       })
     );
   };
 
-  const handleRemoveFromCart = ({
-    productId,
-    selectedWeight,
-    color,
-  }) => {
+  const handleRemoveFromCart = ({ productId, selectedWeight }) => {
     dispatch(
       removeFromCart({
         productId,
         selectedWeight,
-        color,
         guestId,
       })
     );
@@ -57,10 +45,8 @@ const CartContents = ({ cart, userId, guestId }) => {
             <div>
               <h3>{product.name}</h3>
               <p className="text-sm text-gray-500">
-                Weight: {product.selectedWeight || product.weight || "-"} | Color:{" "}
-                {product.color || "-"}
+                Weight: {String(product.selectedWeight ?? product.weight ?? "default")}
               </p>
-
               <div className="flex items-center mt-2">
                 <button
                   className="border rounded px-2 py-1 text-xl font-medium"
@@ -69,9 +55,7 @@ const CartContents = ({ cart, userId, guestId }) => {
                       productId: product.productId || product._id,
                       delta: -1,
                       quantity: product.quantity,
-                      selectedWeight:
-                        product.selectedWeight || product.weight,
-                      color: product.color,
+                      selectedWeight: String(product.selectedWeight ?? product.weight ?? "default"),
                     })
                   }
                 >
@@ -87,9 +71,7 @@ const CartContents = ({ cart, userId, guestId }) => {
                       productId: product.productId || product._id,
                       delta: 1,
                       quantity: product.quantity,
-                      selectedWeight:
-                        product.selectedWeight || product.weight,
-                      color: product.color,
+                      selectedWeight: String(product.selectedWeight ?? product.weight ?? "default"),
                     })
                   }
                 >
@@ -100,15 +82,13 @@ const CartContents = ({ cart, userId, guestId }) => {
           </div>
 
           <div className="text-right">
-            <p>$ {product.price.toLocaleString()}</p>
+            <p>{product.price.toLocaleString()} DH</p>
 
             <button
               onClick={() =>
                 handleRemoveFromCart({
                   productId: product.productId || product._id,
-                  selectedWeight:
-                    product.selectedWeight || product.weight,
-                  color: product.color,
+                  selectedWeight: String(product.selectedWeight ?? product.weight ?? "default"),
                 })
               }
             >

@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchAdminProducts } from "../redux/adminProductSlice.js";
+import { fetchAllOrders } from "../redux/AdminOrderSlice.js";
 
 const AdminHomePage = () => {
 const dispatch = useDispatch();
@@ -71,8 +75,10 @@ const {
                         orders.map((order) => (
                            <tr key={order._id} className="border-b hover:bg-gray-50 cursor-pointer">
                             <td className="p-4">{order._id}</td>
-                            <td className="p-4">{order.user.name}</td>
-                            <td className="p-4">{order.totalPrice.toFixed(2)}</td>
+                            <td className="p-4">{order.user?.name || "Unknown"}</td>
+                            <td className="p-4">
+                              {typeof order.totalPrice === "number" ? order.totalPrice.toFixed(2) : "0.00"}
+                           </td>
                             <td className="p-4">{order.status}</td>
                            </tr>
                         ))

@@ -5,7 +5,6 @@ const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Helper function to get a cart by user Id
 const getCart = async (userId, guestId) => {
   if (userId) {
     return await Cart.findOne({ user: userId });
@@ -22,59 +21,54 @@ const recalcTotal = (cart) => {
   );
 };
 
-const findLineItemIndex = (cart, { productId, selectedWeight, color }) => {
+const findLineItemIndex = (cart, { productId, selectedWeight }) => {
+  const sw = selectedWeight || "default";
+
   return cart.products.findIndex((p) => {
     const sameProduct = p.productId.toString() === productId;
-    const sameColor = color ? p.color === color : true;
-    const sameWeight = selectedWeight ? p.selectedWeight === selectedWeight : true;
-    return sameProduct && sameColor && sameWeight;
+    const pw = p.selectedWeight || "default";
+    const sameWeight = pw === sw;
+    return sameProduct && sameWeight;
   });
 };
 
-// @route POST /api/cart
-// @desc Add a product to the cart for a guest or logged in user
-// @access Public
 router.post("/", async (req, res) => {
-  const { productId, quantity, color, selectedWeight, guestId } = req.body;
+  const { productId, quantity, selectedWeight, guestId } = req.body;
   const userId = req.user ? req.user._id : null;
+  const normalizedWeight = selectedWeight || "default";
 
   try {
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // Conversion
     const qty = Number(quantity) || 1;
     const price = Number(product.price);
 
-    // Determine if the user is logged in or guest
     let cart = await getCart(userId, guestId);
 
-    // If the cart exists,update it
     if (cart) {
-      const index = findLineItemIndex(cart, { productId, selectedWeight, color });
+      const index = findLineItemIndex(cart, {
+        productId,
+        selectedWeight: normalizedWeight,
+      });
 
       if (index > -1) {
-        // If the product already exists, update the quantity
         cart.products[index].quantity += qty;
       } else {
-        // add new product
         cart.products.push({
           productId,
           name: product.name,
           image: product.images[0].url,
           price,
-          selectedWeight,
-          color,
+          selectedWeight: normalizedWeight,
           quantity: qty,
         });
       }
 
-      // Recalculate the total price
       recalcTotal(cart);
       await cart.save();
       return res.status(200).json(cart);
     } else {
-      // Create a new cart for the guest or user
       const newCart = await Cart.create({
         user: userId || undefined,
         guestId: guestId ? guestId : "guest_" + new Date().getTime(),
@@ -84,8 +78,7 @@ router.post("/", async (req, res) => {
             name: product.name,
             image: product.images[0].url,
             price,
-            selectedWeight,
-            color,
+            selectedWeight: normalizedWeight,
             quantity: qty,
           },
         ],
@@ -99,30 +92,29 @@ router.post("/", async (req, res) => {
   }
 });
 
-// @route PUT /api/cart
-// @desc Update product quantity in the cart for a guest or logged-in user
-// @access Public
 router.put("/", async (req, res) => {
-  const { productId, quantity, selectedWeight, color, guestId } = req.body;
+  const { productId, quantity, selectedWeight, guestId } = req.body;
   const qty = Number(quantity);
   const userId = req.user ? req.user._id : null;
+  const normalizedWeight = selectedWeight || "default";
 
   try {
     let cart = await getCart(userId, guestId);
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
-    const index = findLineItemIndex(cart, { productId, selectedWeight, color });
+    const index = findLineItemIndex(cart, {
+      productId,
+      selectedWeight: normalizedWeight,
+    });
     if (index === -1)
       return res.status(404).json({ message: "Product not found in cart" });
 
-    //update quantity
     if (qty > 0) {
       cart.products[index].quantity = qty;
     } else {
-      cart.products.splice(index, 1); // Remove product if quantity is 0
+      cart.products.splice(index, 1);
     }
 
-    // Recalculate the total price
     recalcTotal(cart);
     await cart.save();
     return res.status(200).json(cart);
@@ -132,24 +124,24 @@ router.put("/", async (req, res) => {
   }
 });
 
-// @route DELETE /api/cart
-// @desc Remove a product from the cart
-// @access Public
 router.delete("/", async (req, res) => {
-  const { productId, selectedWeight, color, guestId } = req.body;
+  const { productId, selectedWeight, guestId } = req.body;
   const userId = req.user ? req.user._id : null;
+  const normalizedWeight = selectedWeight || "default";
 
   try {
     let cart = await getCart(userId, guestId);
 
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
-    const index = findLineItemIndex(cart, { productId, selectedWeight, color });
+    const index = findLineItemIndex(cart, {
+      productId,
+      selectedWeight: normalizedWeight,
+    });
 
     if (index > -1) {
       cart.products.splice(index, 1);
 
-      // Recalculate the total price
       recalcTotal(cart);
       await cart.save();
       return res.status(200).json(cart);
@@ -162,9 +154,6 @@ router.delete("/", async (req, res) => {
   }
 });
 
-// @route GET /api/cart
-// @desc Get logged-in user's or guest user's cart
-// @access Private (user) / Public with guestId
 router.get("/", async (req, res) => {
   const userId = req.user ? req.user._id : null;
   const { guestId } = req.query;
@@ -182,13 +171,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @route Post /api/cart/merge
-// @desc Merge guest cart into user cart on login
-// @access Private
 router.post("/merge", protect, async (req, res) => {
   const { guestId } = req.body;
   try {
-    // Find the guest cart and user cart
     const guestCart = await Cart.findOne({ guestId });
     const userCart = await Cart.findOne({ user: req.user._id });
 
@@ -197,30 +182,33 @@ router.post("/merge", protect, async (req, res) => {
         return res.status(400).json({ message: "Guest cart is empty" });
       }
       if (userCart) {
-        // Merge guest cart into user cart
         guestCart.products.forEach((guestItem) => {
+          const giw = guestItem.selectedWeight || "default";
+
           const index = userCart.products.findIndex((item) => {
             const sameProduct =
               item.productId.toString() === guestItem.productId.toString();
-            const sameColor = item.color === guestItem.color;
-            const sameWeight = item.selectedWeight === guestItem.selectedWeight;
-            return sameProduct && sameColor && sameWeight;
+            const uiw = item.selectedWeight || "default";
+            const sameWeight = uiw === giw;
+            return sameProduct && sameWeight;
           });
+
           if (index > -1) {
-            // If the items exists in the user cart,update the quantity
             userCart.products[index].quantity += guestItem.quantity;
           } else {
-            // Otherwise, add the guest item to the cart
-            userCart.products.push(guestItem);
+            userCart.products.push({
+              ...guestItem.toObject(),
+              selectedWeight: giw,
+            });
           }
         });
+
         userCart.totalPrice = userCart.products.reduce(
           (acc, item) => acc + item.price * item.quantity,
           0
         );
         await userCart.save();
 
-        // Remove the guest cart after merging
         try {
           await Cart.findOneAndDelete({ guestId });
         } catch (error) {
@@ -228,16 +216,25 @@ router.post("/merge", protect, async (req, res) => {
         }
         res.status(200).json(userCart);
       } else {
-        // If the user has no existing cart,assign the guest cart to the user
         guestCart.user = req.user._id;
         guestCart.guestId = undefined;
+
+        guestCart.products = guestCart.products.map((p) => ({
+          ...p.toObject(),
+          selectedWeight: p.selectedWeight || "default",
+        }));
+
+        guestCart.totalPrice = guestCart.products.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        );
+
         await guestCart.save();
 
         res.status(200).json(guestCart);
       }
     } else {
       if (userCart) {
-        // Guest cart has already been merged, return user cart
         return res.status(200).json(userCart);
       }
       res.status(404).json({ message: "Guest cart not found" });
@@ -249,4 +246,3 @@ router.post("/merge", protect, async (req, res) => {
 });
 
 module.exports = router;
- 

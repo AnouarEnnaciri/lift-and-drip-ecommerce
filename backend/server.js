@@ -17,7 +17,7 @@ const adminOrderRoutes = require("./routes/adminOrderRoutes.js")
 const app = express();              //creates an Express app instance (your web server)
 app.use(express.json());             // allows Express to automatically parse incoming JSON request bodies
 app.use(cors());                  //allows requests from your React frontend
-
+app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 dotenv.config();
 
 const PORT = process.env.PORT || 3000; //Port for http://localhost:9000

@@ -1,6 +1,12 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchProductDetails } from "../../redux/productsSlice.js";
+import { updateProduct } from "../../redux/adminProductSlice.js";
+import axios from "axios";
 
 const EditProductPage = () => {
     const dispatch = useDispatch();
@@ -31,7 +37,11 @@ const EditProductPage = () => {
 
     useEffect(()=>{
         if(selectedProduct){
-            setProductData(selectedProduct);
+            setProductData({
+                ...selectedProduct,
+                image: Array.isArray(selectedProduct.image) ? selectedProduct.image : [],
+                weightRange: Array.isArray(selectedProduct.weightRange) ? selectedProduct.weightRange : [],
+            });
         }
     },[selectedProduct]);
 
@@ -56,7 +66,7 @@ const EditProductPage = () => {
         );
         setProductData((prevData) => ({
             ...prevData,
-            image: [...prevData.image, {url: data.imageUrl, altText: ""}]
+            image: [...(Array.isArray(prevData.image) ? prevData.image : []), {url: data.imageUrl, altText: ""}]
         }))
         setUploading(false)
         } catch (error) {

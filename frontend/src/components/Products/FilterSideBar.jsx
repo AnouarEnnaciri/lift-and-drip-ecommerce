@@ -42,6 +42,16 @@ const FilterSideBar = () => {
     { label: "35 - 50 KG", value: "35-50" },
   ];
 
+  const updateURLParams = (next) => {
+    const params = new URLSearchParams();
+    Object.entries(next).forEach(([k, v]) => {
+      if (v !== null && v !== "" && v !== undefined) {
+        params.set(k, v);
+      }
+    });
+    setSearchParams(params);
+  };
+
   useEffect(() => {
     const params = Object.fromEntries([...searchParams]);
     setFilters({
@@ -53,15 +63,13 @@ const FilterSideBar = () => {
     });
   }, [searchParams]);
 
-  const updateURLParams = (next) => {
-    const params = new URLSearchParams();
-    Object.entries(next).forEach(([k, v]) => {
-      if (v !== null && v !== "" && v !== undefined) {
-        params.set(k, v);
-      }
-    });
-    setSearchParams(params);
-  };
+  useEffect(() => {
+    if (filters.category === "Strength Equipment" && (filters.equipmentType === "Rack" || filters.equipmentType === "Bench") && filters.weight) {
+      const next = { ...filters, weight: null };
+      setFilters(next);
+      updateURLParams(next);
+    }
+  }, [filters.category, filters.equipmentType, filters.weight]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,6 +79,9 @@ const FilterSideBar = () => {
       next.category = value;
       next.equipmentType = null;
       next.weight = null;
+    } else if (name === "equipmentType") {
+      next.equipmentType = value;
+      if (value === "Rack" || value === "Bench") next.weight = null;
     } else if (name === "maxPrice") {
       next.maxPrice = Number(value);
       next.minPrice = 0;
@@ -106,16 +117,23 @@ const FilterSideBar = () => {
         </div>
       )}
 
-      {filters.category === "Strength Equipment" && (
-        <div className="mb-6">
-          {weightRanges.map((w) => (
-            <label key={w.value} className="flex items-center mb-1">
-              <input type="radio" name="weight" value={w.value} checked={filters.weight === w.value} onChange={handleChange} />
-              <span className="ml-2">{w.label}</span>
-            </label>
-          ))}
-        </div>
-      )}
+      {filters.category === "Strength Equipment" &&
+  filters.equipmentType !== "Rack" && filters.equipmentType !== "Bench" && (
+    <div className="mb-6">
+      {weightRanges.map((w) => (
+        <label key={w.value} className="flex items-center mb-1">
+          <input
+            type="radio"
+            name="weight"
+            value={w.value}
+            checked={filters.weight === w.value}
+            onChange={handleChange}
+          />
+          <span className="ml-2">{w.label}</span>
+        </label>
+      ))}
+    </div>
+  )}
 
       <div className="mb-8">
         <input type="range" name="maxPrice" min={0} max={5000} value={filters.maxPrice} onChange={handleChange} />
