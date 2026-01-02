@@ -52,7 +52,7 @@ const Checkout = () => {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const res = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${id}/finalize`,
+      `/api/checkout/${id}/finalize`,
       {},
       { headers }
     );
@@ -68,7 +68,7 @@ const Checkout = () => {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
+        `/api/checkout/${checkoutId}/pay`,
         { paymentStatus: "paid", paymentDetails: details },
         { headers }
       );
@@ -256,7 +256,7 @@ const Checkout = () => {
             >
               <div className="flex items-start">
                 <img
-                  src={product.image}
+                  src={product.image || product.images?.[0]?.url}
                   alt={product.name}
                   className="w-20 h-24 object-cover mr-4"
                 />

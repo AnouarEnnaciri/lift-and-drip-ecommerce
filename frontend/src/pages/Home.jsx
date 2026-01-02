@@ -24,9 +24,7 @@ const Home = () => {
         setLoadingSections(true);
         setSectionsError("");
 
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/products/home/sections?limit=8`
-        );
+        const response = await axios.get(`/api/products/home/sections?limit=8`);
 
         setSections(response.data);
       } catch (error) {
