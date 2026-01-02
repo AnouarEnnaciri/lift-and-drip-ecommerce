@@ -22,15 +22,25 @@ dotenv.config();
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
+  "https://lift-and-drip-ecommerce.vercel.app",
 ].filter(Boolean);
 
-app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin) return cb(null, true);
-    if (allowedOrigins.includes(origin)) return cb(null, true);
-    return cb(new Error("Not allowed by CORS"));
-  }
-}));
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true);
+      if (allowedOrigins.includes(origin)) return cb(null, true);
+      if (/^https:\/\/lift-and-drip-ecommerce-.*\.vercel\.app$/.test(origin)) {
+        return cb(null, true);
+      }
+      return cb(new Error("Not allowed by CORS: " + origin));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.options("*", cors());
 
 app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 
