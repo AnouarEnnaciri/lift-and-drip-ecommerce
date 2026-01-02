@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const { protect, admin } = require("../middleware/authMiddleware");
 
@@ -371,6 +372,37 @@ router.patch("/:id/top-conditioning", protect, admin, async (req, res) => {
   }
 });
 
+router.get("/sections", async (req, res) => {
+  try {
+    const limit = Math.min(Number(req.query.limit) || 8, 30);
+
+    const featured = await Product.find({ isPublished: true, isFeatured: true })
+      .sort({ featuredRank: 1, createdAt: -1 })
+      .limit(limit);
+
+    const bestSellers = await Product.find({ isPublished: true, isBestSeller: true })
+      .sort({ bestSellerRank: 1, createdAt: -1 })
+      .limit(limit);
+
+    const topStrength = await Product.find({ isPublished: true, isTopStrength: true })
+      .sort({ topStrengthRank: 1, createdAt: -1 })
+      .limit(limit);
+
+    const topConditioning = await Product.find({ isPublished: true, isTopConditioning: true })
+      .sort({ topConditioningRank: 1, createdAt: -1 })
+      .limit(limit);
+
+    const newArrivals = await Product.find({isPublished: true,isNewArrival: true,})
+      .sort({ newArrivalRank: 1, createdAt: -1 })
+      .limit(limit);
+
+    res.json({ featured, bestSellers, topStrength, topConditioning,newArrivals });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send("Server Error");
+  }
+});
+
 router.get("/home/sections", async (req, res) => {
   try {
     const limit = Math.min(Number(req.query.limit) || 8, 30);
@@ -390,11 +422,10 @@ router.get("/home/sections", async (req, res) => {
     const topConditioning = await Product.find({ isPublished: true, isTopConditioning: true })
       .sort({ topConditioningRank: 1, createdAt: -1 })
       .limit(limit);
+
     const newArrivals = await Product.find({isPublished: true,isNewArrival: true,})
-
-  .sort({ newArrivalRank: 1, createdAt: -1 })
-  .limit(limit);
-
+      .sort({ newArrivalRank: 1, createdAt: -1 })
+      .limit(limit);
 
     res.json({ featured, bestSellers, topStrength, topConditioning,newArrivals });
   } catch (e) {
@@ -447,7 +478,11 @@ router.get("/new-arrivals", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product id" });
+    }
+    const product = await Product.findById(id);
     if (product) {
       res.json(product);
     } else {
