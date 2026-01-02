@@ -12,8 +12,6 @@ const subscribeRoute = require("./routes/subscribeRoute.js");
 const adminRoutes = require("./routes/adminRoutes.js");
 const productAdminRoutes = require("./routes/productAdminRoutes.js");
 const adminOrderRoutes = require("./routes/adminOrderRoutes.js")
-const serverless = require("serverless-http"); // wraps Express so it can run on Vercel Serverless Functions
-
 
 const app = express();              //creates an Express app instance (your web server)
 app.set("etag", false);
@@ -38,24 +36,21 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-app.options("*", cors());
+// IMPORTANT: Express 5 doesn't like "*"
+app.options(/.*/, cors());
 
 app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 
 const PORT = process.env.PORT || 3000; //Port for http://localhost:9000
 
-connectDB().catch((err) => { // Connect to MongoDB
-  console.error("MongoDB connection failed", err.message);
-});
-
+connectDB(); // Connect to MongoDB
 
 app.get("/", (req, res) => {  //  When someone visits the homepage ( / ) of my API using a GET request send them a response that says WELCOME TO LIFT & DRIP API!
-res.send("WELCOME TO LIFT & DRIP API!");       // the response when someone visits that route
-
+  res.send("WELCOME TO LIFT & DRIP API!");       // the response when someone visits that route
 });
 
 app.get("/health", (req, res) => {
-res.status(200).json({ ok: true });
+  res.status(200).json({ ok: true });
 });
 
 // API Routes
@@ -72,9 +67,12 @@ app.use("/api/admin/users",adminRoutes);
 app.use("/api/admin/products",productAdminRoutes)
 app.use("/api/admin/orders",adminOrderRoutes)
 
-// app.listen(PORT, () => { // starts the server and makes it listen for requests on port 9000
-//     console.log(`Server is running on http://localhost:${PORT}`)      // logs a confirmation message in the terminal
-// });
+// Export for Vercel serverless
+module.exports = app;
 
-// Export as serverless handler for Vercel (NO app.listen)
-module.exports = serverless(app); // wraps the Express app so Vercel can run it as a serverless function
+// // starts the server and makes it listen for requests on port 9000
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`)      // logs a confirmation message in the terminal
+  });
+}
