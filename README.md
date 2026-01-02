@@ -6,9 +6,9 @@ Le projet a été conçu pour reproduire le fonctionnement réel d’une applica
 Il s’agit de mon premier projet e-commerce complet, avec un accent mis sur la séparation frontend/backend, la gestion des données, l’authentification et les contraintes réelles rencontrées lors du déploiement.
 
 Démo en ligne
-Frontend : [https://TON-FRONTEND.vercel.app](https://lift-and-drip-ecommerce-l52u.vercel.app/)
+Frontend : https://lift-and-drip-ecommerce-l52u.vercel.app/
 
-Backend API : [https://TON-BACKEND.vercel.app](https://lift-and-drip-ecommerce.vercel.app/ )
+Backend API : https://lift-and-drip-ecommerce.vercel.app/ 
 
 Fonctionnalités
 
