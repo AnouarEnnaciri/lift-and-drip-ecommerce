@@ -12,6 +12,7 @@ const subscribeRoute = require("./routes/subscribeRoute.js");
 const adminRoutes = require("./routes/adminRoutes.js");
 const productAdminRoutes = require("./routes/productAdminRoutes.js");
 const adminOrderRoutes = require("./routes/adminOrderRoutes.js")
+const serverless = require("serverless-http"); // wraps Express so it can run on Vercel Serverless Functions
 
 
 const app = express();              //creates an Express app instance (your web server)
@@ -43,7 +44,9 @@ app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 
 const PORT = process.env.PORT || 3000; //Port for http://localhost:9000
 
-connectDB(); // Connect to MongoDB
+connectDB().catch((err) => { // Connect to MongoDB
+  console.error("MongoDB connection failed", err.message);
+});
 
 
 app.get("/", (req, res) => {  //  When someone visits the homepage ( / ) of my API using a GET request send them a response that says WELCOME TO LIFT & DRIP API!
@@ -68,8 +71,10 @@ app.use("/api/subscribe", subscribeRoute);
 app.use("/api/admin/users",adminRoutes);
 app.use("/api/admin/products",productAdminRoutes)
 app.use("/api/admin/orders",adminOrderRoutes)
-app.listen(PORT, () => {
-// // starts the server and makes it listen for requests on port 9000
 
-    console.log(`Server is running on http://localhost:${PORT}`)      // logs a confirmation message in the terminal
-});
+// app.listen(PORT, () => { // starts the server and makes it listen for requests on port 9000
+//     console.log(`Server is running on http://localhost:${PORT}`)      // logs a confirmation message in the terminal
+// });
+
+// Export as serverless handler for Vercel (NO app.listen)
+module.exports = serverless(app); // wraps the Express app so Vercel can run it as a serverless function
