@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import api from "../api/api";
 
 /* Bonjour un petit rappel:
    FETCH PRODUCTS (FILTERS) */
@@ -14,9 +15,7 @@ export const fetchProductsByFilters = createAsyncThunk(
       }
     });
 
-    const res = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/products?${query.toString()}`
-    );
+    const res = await api.get(`/api/products?${query.toString()}`);
 
     return res.data;
   }
@@ -28,9 +27,7 @@ export const fetchProductsByFilters = createAsyncThunk(
 export const fetchProductDetails = createAsyncThunk(
   "products/fetchProductDetails",
   async (id) => {
-    const res = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`
-    );
+    const res = await api.get(`/api/products/${id}`);
     return res.data;
   }
 );
@@ -41,9 +38,7 @@ export const fetchProductDetails = createAsyncThunk(
 export const fetchSimilarProducts = createAsyncThunk(
   "products/fetchSimilarProducts",
   async ({ id }) => {
-    const res = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/products/similar/${id}`
-    );
+    const res = await api.get(`/api/products/similar/${id}`);
     return res.data;
   }
 );

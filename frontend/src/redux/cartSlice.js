@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../api/api";
 
 const loadCartFromStorage = () => {
   const storedCart = localStorage.getItem("cart");
@@ -29,13 +29,10 @@ export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async ({ guestId }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-        {
-          params: { guestId },
-          ...getAuthHeaders(),
-        }
-      );
+      const response = await api.get("/api/cart", {
+        params: { guestId },
+        ...getAuthHeaders(),
+      });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -46,10 +43,13 @@ export const fetchCart = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async ({ productId, quantity, selectedWeight, guestId }, { rejectWithValue }) => {
+  async (
+    { productId, quantity, selectedWeight, guestId },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
+      const response = await api.post(
+        "/api/cart",
         {
           productId,
           quantity,
@@ -67,10 +67,13 @@ export const addToCart = createAsyncThunk(
 
 export const updateCartItemQuantity = createAsyncThunk(
   "cart/updateCartItemQuantity",
-  async ({ productId, quantity, selectedWeight, guestId }, { rejectWithValue }) => {
+  async (
+    { productId, quantity, selectedWeight, guestId },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
+      const response = await api.put(
+        "/api/cart",
         {
           productId,
           quantity,
@@ -90,9 +93,7 @@ export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async ({ productId, selectedWeight, guestId }, { rejectWithValue }) => {
     try {
-      const response = await axios({
-        method: "DELETE",
-        url: `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
+      const response = await api.delete("/api/cart", {
         data: { productId, selectedWeight, guestId },
         ...getAuthHeaders(),
       });
@@ -107,8 +108,8 @@ export const mergeCart = createAsyncThunk(
   "cart/mergeCart",
   async ({ guestId }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/cart/merge`,
+      const response = await api.post(
+        "/api/cart/merge",
         { guestId },
         getAuthHeaders()
       );
