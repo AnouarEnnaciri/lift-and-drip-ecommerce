@@ -19,17 +19,18 @@ mongoose.connect(process.env.MONGO_URL);
 const seedData = async () => {
     try{
         // Clear existing data
-        await Product.deleteMany();
-        await User.deleteMany();
         await Cart.deleteMany();
 
 // Create a default admin User
-  const createdUser = await User.create({
+  let createdUser=await User.findOne({email:"admin@example.com"});
+  if(!createdUser){
+  createdUser=await User.create({
     name:"Admin User",
     email:"admin@example.com",
     password:"123456",
     role:"admin",
   });
+  }
 
   // Assign the default user ID to each product
   const userID = createdUser._id;
@@ -39,7 +40,10 @@ const seedData = async () => {
   })
 
   // Insert the products into the database
-  await Product.insertMany(sampleProducts);
+  for(const p of sampleProducts){
+    if(!p.sku)continue;
+    await Product.updateOne({sku:p.sku},{$setOnInsert:p},{upsert:true});
+  }
 
   console.log("Product data seeded successfully!");
   process.exit();

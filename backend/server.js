@@ -15,6 +15,7 @@ const adminOrderRoutes = require("./routes/adminOrderRoutes.js")
 
 
 const app = express();              //creates an Express app instance (your web server)
+app.set("etag", false);
 app.use(express.json());             // allows Express to automatically parse incoming JSON request bodies
 dotenv.config();
 

@@ -5,7 +5,9 @@ import ProductGrid from "../components/Products/ProductGrid";
 import FeaturedCollection from "../components/Products/FeaturedCollection";
 import FeaturesSection from "../components/Products/FeaturesSection";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import  api from "../api/api";
+
+
 
 const Home = () => {
   const [sections, setSections] = useState({
@@ -13,6 +15,7 @@ const Home = () => {
     bestSellers: [],
     topStrength: [],
     topConditioning: [],
+    newArrivals: [],
   });
 
   const [loadingSections, setLoadingSections] = useState(true);
@@ -24,14 +27,27 @@ const Home = () => {
         setLoadingSections(true);
         setSectionsError("");
 
-        const response = await axios.get(`/api/products/home/sections?limit=8`);
+        const response = await api.get(`/api/products/home/sections?limit=8`);
 
-        setSections(response.data);
+        setSections({
+          featured: Array.isArray(response.data?.featured) ? response.data.featured : [],
+          bestSellers: Array.isArray(response.data?.bestSellers) ? response.data.bestSellers : [],
+          topStrength: Array.isArray(response.data?.topStrength) ? response.data.topStrength : [],
+          topConditioning: Array.isArray(response.data?.topConditioning) ? response.data.topConditioning : [],
+          newArrivals: Array.isArray(response.data?.newArrivals) ? response.data.newArrivals : [],
+        });
       } catch (error) {
         console.error(error);
         setSectionsError(
           error?.response?.data?.message || error.message || "Failed to load sections"
         );
+        setSections({
+          featured: [],
+          bestSellers: [],
+          topStrength: [],
+          topConditioning: [],
+          newArrivals: [],
+        });
       } finally {
         setLoadingSections(false);
       }
@@ -54,8 +70,8 @@ const Home = () => {
       <div className="container mx-auto mb-10">
         {loadingSections ? (
           <p className="text-center">Loading best seller product...</p>
-        ) : sections.bestSellers.length > 0 ? (
-          <ProductGrid products={sections.bestSellers} />
+        ) : (sections.bestSellers || []).length > 0 ? (
+          <ProductGrid products={sections.bestSellers || []} />
         ) : (
           <p className="text-center">No best sellers found.</p>
         )}
@@ -68,8 +84,8 @@ const Home = () => {
 
         {loadingSections ? (
           <p className="text-center">Loading top strength...</p>
-        ) : sections.topStrength.length > 0 ? (
-          <ProductGrid products={sections.topStrength} />
+        ) : (sections.topStrength || []).length > 0 ? (
+          <ProductGrid products={sections.topStrength || []} />
         ) : (
           <p className="text-center">No top strength products found.</p>
         )}
@@ -81,8 +97,8 @@ const Home = () => {
       <div className="container mx-auto mb-10">
         {loadingSections ? (
           <p className="text-center">Loading conditioning gear...</p>
-        ) : sections.topConditioning.length > 0 ? (
-          <ProductGrid products={sections.topConditioning} />
+        ) : (sections.topConditioning || []).length > 0 ? (
+          <ProductGrid products={sections.topConditioning || []} />
         ) : (
           <p className="text-center">No conditioning products found.</p>
         )}

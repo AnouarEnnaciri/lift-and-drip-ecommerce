@@ -1,7 +1,7 @@
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import api from "../../api/api";
 
 const NewArrivals = () => {
     const scrollRef = useRef(null);
@@ -16,10 +16,12 @@ const NewArrivals = () => {
     useEffect(() => {
         const fetchNewArrivals = async () => {
             try {
-                const response = axios.get(`/api/products/new-arrivals?limit=8`)
-                setNewArrivals(response.data);
+                const response = await api.get(`/api/products/new-arrivals?limit=8`)
+                const products = response.data?.products ?? response.data;
+                setNewArrivals(Array.isArray(products) ? products : []);
             } catch (error) {
                 console.error(error);
+                setNewArrivals([]);
             }
         };
         fetchNewArrivals();
@@ -99,6 +101,7 @@ const NewArrivals = () => {
                 </button>
                 <button
                   onClick={() => scroll("right")}
+                  disabled={!canScrollRight}
                   className={`p-2 rounded border ${
                     canScrollRight
                      ? "bg-white text-black"
@@ -120,14 +123,14 @@ const NewArrivals = () => {
         onMouseUp={handleMouseUpOrLeave}
         onMouseLeave={handleMouseUpOrLeave}
         >
-            {newArrivals.map((product) => {
+            {(newArrivals || []).map((product) => {
                 const isBelt = product.sku === "ACC-BELT-10MM";
                 return (
                     <div key={product._id}
                     className="min-w-[100%] lg:min-w-[30%] relative">
                         <img 
-                        src={product.images[0]?.url} 
-                        alt={product.images[0]?.altText || product.name}
+                        src={product.images?.[0]?.url || product.image || ""} 
+                        alt={product.images?.[0]?.altText || product.name}
                         className={`w-full h-[500px] object-cover rounded-lg ${
                             isBelt ? "object-left" : "object-center"
                         }`}

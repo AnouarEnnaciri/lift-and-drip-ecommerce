@@ -1,0 +1,9 @@
+redux
+cloudinary
+MERN
+node
+express
+react
+windtail css
+vercel
+render
