@@ -16,9 +16,22 @@ const adminOrderRoutes = require("./routes/adminOrderRoutes.js")
 
 const app = express();              //creates an Express app instance (your web server)
 app.use(express.json());             // allows Express to automatically parse incoming JSON request bodies
-app.use(cors());                  //allows requests from your React frontend
-app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 dotenv.config();
+
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error("Not allowed by CORS"));
+  }
+}));
+
+app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 
 const PORT = process.env.PORT || 3000; //Port for http://localhost:9000
 
@@ -28,6 +41,10 @@ connectDB(); // Connect to MongoDB
 app.get("/", (req, res) => {  //  When someone visits the homepage ( / ) of my API using a GET request send them a response that says WELCOME TO LIFT & DRIP API!
 res.send("WELCOME TO LIFT & DRIP API!");       // the response when someone visits that route
 
+});
+
+app.get("/health", (req, res) => {
+res.status(200).json({ ok: true });
 });
 
 // API Routes

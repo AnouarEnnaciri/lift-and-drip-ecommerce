@@ -14,7 +14,7 @@ export const createCheckout = createAsyncThunk("checkout/createCheckout", async(
             )
             return response.data;
     } catch (error){
-        return rejectWithValue(error.response.data);
+       return rejectWithValue(error.response?.data || { message: error.message });
     }
 }
 )

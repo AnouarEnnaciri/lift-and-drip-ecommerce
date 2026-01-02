@@ -25,7 +25,7 @@ export const addUser = createAsyncThunk("admin/addUser", async(userData, {reject
 );
 return response.data;
     } catch (error){
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(error.response?.data || { message: error.message });
     }
 });
 

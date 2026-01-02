@@ -16,7 +16,7 @@ export const fetchUserOrders = createAsyncThunk(
     );
     return response.data;
     } catch (error){
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(error.response?.data || { message: error.message });
     }
 }
 );
@@ -35,7 +35,7 @@ export const fetchOrderDetails = createAsyncThunk(
         );
         return response.data;
     } catch (error){
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(error.response?.data || { message: error.message });
     }
 }
 );
